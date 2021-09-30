@@ -14,8 +14,9 @@ class Aura extends StatefulWidget{
   final Alignment end;
   final double lowerBound;
   final double upperBound;
+  final Curve curve;
 
-  Aura({this.animationPeriod, this.minHeight=10, this.maxHeight=20, this.colors, this.begin=Alignment.bottomCenter, this.end=Alignment.topCenter, this.lowerBound=0, this.upperBound=1}):assert(lowerBound<1&&lowerBound>=0&&upperBound>0&&upperBound<=1&&lowerBound<upperBound);
+  Aura({this.animationPeriod, this.minHeight=10, this.maxHeight=20, this.colors, this.begin=Alignment.bottomCenter, this.end=Alignment.topCenter, this.lowerBound=0, this.upperBound=1, this.curve=Curves.easeInOut}):assert(lowerBound<1&&lowerBound>=0&&upperBound>0&&upperBound<=1&&lowerBound<upperBound);
   @override
   State<StatefulWidget> createState() => _AuraState();
 
@@ -32,7 +33,7 @@ class _AuraState extends State<Aura> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    return AuraAnimation(controller: animationController, colors: widget.colors, end: widget.end, begin: widget.begin);
+    return AuraAnimation(controller: CurvedAnimation(parent: animationController, curve: widget.curve), colors: widget.colors, end: widget.end, begin: widget.begin);
   }
 
   @override
@@ -48,14 +49,14 @@ class AuraAnimation extends AnimatedWidget {
   final Alignment end;
   final double maxHeight;
 
-  const AuraAnimation({required AnimationController controller, this.colors, required this.begin, required this.end, this.maxHeight=100})
+  const AuraAnimation({required Animation controller, this.colors, required this.begin, required this.end, this.maxHeight=100})
       : super(listenable: controller);
 
-  AnimationController get animator => listenable as AnimationController;
+  CurvedAnimation get animator => listenable as CurvedAnimation;
 
   @override
   Widget build(BuildContext context) {
-    print(animator.value);
+
     int alpha = (animator.value*255).toInt();
     return Container(
           alignment: begin,
