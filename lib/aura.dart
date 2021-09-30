@@ -1,5 +1,7 @@
 library aura;
 
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +23,7 @@ class _AuraState extends State<Aura> with SingleTickerProviderStateMixin{
   late final AnimationController animationController;
   @override
   void initState() {
-    animationController = AnimationController(vsync: this, lowerBound: widget.minHeight, upperBound: widget.maxHeight);
+    animationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 1);
     animationController.repeat(reverse: true, period: widget.animationPeriod??kThemeAnimationDuration);
     super.initState();
   }
@@ -42,30 +44,30 @@ class AuraAnimation extends AnimatedWidget {
   final List<Color>? colors;
   final Alignment begin;
   final Alignment end;
+  final double maxHeight;
 
-  const AuraAnimation({required AnimationController controller, this.colors, required this.begin, required this.end})
+  const AuraAnimation({required AnimationController controller, this.colors, required this.begin, required this.end, this.maxHeight=100})
       : super(listenable: controller);
 
   AnimationController get animator => listenable as AnimationController;
 
   @override
   Widget build(BuildContext context) {
-
-    return SizedBox(
-        height: animator.upperBound,
-        child: Container(
+    print(animator.value);
+    int alpha = (animator.value*255).toInt();
+    return Container(
           alignment: begin,
-          height: animator.value,
+          height: maxHeight,
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: begin,
                   end: end,
                   colors: colors ?? [
-                    Colors.pink,
+                    Color((alpha<<24)|(0x00FFFFFF&Colors.pink.value)),
                     Color(0x00FFFFFF)
                   ]
               )
           ),
-        ));
+        );
   }
 }
