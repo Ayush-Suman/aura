@@ -12,8 +12,10 @@ class Aura extends StatefulWidget{
   final List<Color>? colors;
   final Alignment begin;
   final Alignment end;
+  final double lowerBound;
+  final double upperBound;
 
-  Aura({this.animationPeriod, this.minHeight=10, this.maxHeight=20, this.colors, this.begin=Alignment.bottomCenter, this.end=Alignment.topCenter});
+  Aura({this.animationPeriod, this.minHeight=10, this.maxHeight=20, this.colors, this.begin=Alignment.bottomCenter, this.end=Alignment.topCenter, this.lowerBound=0, this.upperBound=1}):assert(lowerBound<1&&lowerBound>=0&&upperBound>0&&upperBound<=1&&lowerBound<upperBound)
   @override
   State<StatefulWidget> createState() => _AuraState();
 
@@ -23,7 +25,7 @@ class _AuraState extends State<Aura> with SingleTickerProviderStateMixin{
   late final AnimationController animationController;
   @override
   void initState() {
-    animationController = AnimationController(vsync: this, lowerBound: 0, upperBound: 1);
+    animationController = AnimationController(vsync: this, lowerBound: widget.lowerBound, upperBound: widget.upperBound);
     animationController.repeat(reverse: true, period: widget.animationPeriod??kThemeAnimationDuration);
     super.initState();
   }
