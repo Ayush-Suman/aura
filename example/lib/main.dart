@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           SizedBox(height: 10),
           Container(color: Colors.amber, height: 100,),
           SizedBox(height: 10),
-          Aura(maxHeight: 100, minHeight: 10, lowerBound: 0.5, upperBound: 0.1, animationPeriod: Duration(seconds: 2),)
+          Aura(maxHeight: 100, minHeight: 10, lowerBound: 0.5, upperBound: 1, animationPeriod: Duration(seconds: 2),)
         ],
       ))
     );
